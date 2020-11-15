@@ -1099,3 +1099,232 @@ sb.write('foo')
 
 ## Операторы управления потоком
 
+В Dart можно управлять потоком кода, используя любое из следующих действий:
+
+- `if` и `else`
+- цикл `for`
+- циклы `while` и `do-while`
+- `break` и `continue`
+- `switch` и `case`
+- `assert`
+
+Также можно повлиять на поток управления с помощью `try-catch` и `throw`.
+
+### If и else
+
+Dart поддерживает операторы `if` с необязательными операторами `else`, как показано в следующем примере. 
+
+```dart
+if (isRaining()) {
+  you.bringRainCoat();
+} else if (isSnowing()) {
+  you.wearJacket();
+} else {
+  car.putTopDown();
+}
+```
+
+В отличие от JavaScript, условия должны использовать логические значения, ничего больше.
+
+### Цикл for
+
+Можно использовать стандартный цикл `for`. Например:
+
+```dart
+var message = StringBuffer('Dart is fun');
+for (var i = 0; i < 5; i++) {
+  message.write('!');
+}
+```
+
+Замыкания внутри циклов `for` в Dart фиксируют значение индекса, избегая распространенной ошибки, обнаруживаемой в JavaScript. Например:
+
+```dart
+var callbacks = [];
+for (var i = 0; i < 2; i++) {
+  callbacks.add(() => print(i));
+}
+callbacks.forEach((c) => c());
+```
+
+Результатом будет `0`, а затем `1`, как и ожидалось. Напротив, в примере будет напечатано `2`, а затем `2` в JavaScript.
+
+Если объект, который вы повторяете, является итерируемым, вы можете использовать метод `forEach()`. Использование `forEach()` - хороший вариант, если не нужно знать текущий счетчик итераций:
+
+```dart
+candidates.forEach((candidate) => candidate.interview());
+```
+
+Итерируемые классы, такие как `List` и `Set`, также поддерживают итерацию `for-in`:
+
+```dart
+var collection = [1, 2, 3];
+for (var x in collection) {
+  print(x); // 1 2 3
+}
+```
+
+### While и do-while
+
+Цикл `while` оценивает условие перед циклом:
+
+```dart
+while (!isDone()) {
+  doSomething();
+}
+```
+
+Цикл `do-while` оценивает условие после цикла:
+
+```dart
+do {
+  printLine();
+} while (!atEndOfPage());
+```
+
+### Break и continue
+
+Чтобы остановить цикл нужно использовать `break`:
+
+```dart
+while (true) {
+  if (shutDownRequested()) break;
+  processIncomingRequests();
+}
+```
+
+Чтобы перейти к следующей итерации цикла используется `continue`:
+
+```dart
+for (int i = 0; i < candidates.length; i++) {
+  var candidate = candidates[i];
+  if (candidate.yearsExperience < 5) {
+    continue;
+  }
+  candidate.interview();
+}
+```
+
+Можно написать этот пример по-другому, если использовать [Iterable](https://api.dart.dev/stable/dart-core/Iterable-class.html), например список или набор:
+
+```dart
+candidates
+    .where((c) => c.yearsExperience >= 5)
+    .forEach((c) => c.interview());
+```
+
+### Switch и case
+
+Операторы `switch` в Dart сравнивают целочисленные, строковые или константы времени компиляции с помощью `==`. Все сравниваемые объекты должны быть экземплярами одного и того же класса (а не любого из его подтипов), и этот класс не должен переопределять `==`. Перечислимые типы хорошо работают в операторах `switch`.
+
+> **Примечание**: операторы `switch` в Dart предназначены для ограниченных случаев, например, в интерпретаторах или сканерах.
+
+Каждое непустое предложение `case`, как правило, заканчивается оператором `break`. Другими допустимыми способами завершения непустого предложения `case` являются операторы `continue`, `throw` или `return`.
+
+Пункт `default` используется для выполнения кода, когда не подходит ни один из  `case`:
+
+```dart
+var command = 'OPEN';
+switch (command) {
+  case 'CLOSED':
+    executeClosed();
+    break;
+  case 'PENDING':
+    executePending();
+    break;
+  case 'APPROVED':
+    executeApproved();
+    break;
+  case 'DENIED':
+    executeDenied();
+    break;
+  case 'OPEN':
+    executeOpen();
+    break;
+  default:
+    executeUnknown();
+}
+```
+
+В следующем примере оператор `break` отсутствует в пункте `case`, что приводит к ошибке:
+
+```dart
+var command = 'OPEN';
+switch (command) {
+  case 'OPEN':
+    executeOpen();
+    // ERROR: Missing break
+
+  case 'CLOSED':
+    executeClosed();
+    break;
+}
+```
+
+Тем не менее, Dart поддерживает пустые `case` о регистре, что позволяет избежать отказа:
+
+```dart
+var command = 'CLOSED';
+switch (command) {
+  case 'CLOSED': // Empty case falls through.
+  case 'NOW_CLOSED':
+    // Runs for both CLOSED and NOW_CLOSED.
+    executeNowClosed();
+    break;
+}
+```
+
+Если действительно нужно провалиться дальше, то можно использовать оператор `continue` и метку:
+
+```dart
+var command = 'CLOSED';
+switch (command) {
+  case 'CLOSED':
+    executeClosed();
+    continue nowClosed;
+  // Continues executing at the nowClosed label.
+
+  nowClosed:
+  case 'NOW_CLOSED':
+    // Runs for both CLOSED and NOW_CLOSED.
+    executeNowClosed();
+    break;
+}
+```
+
+Пункт `case` может иметь локальные переменные, которые видны только внутри области действия этого предложения.
+
+### Assert
+
+Во время разработки можно использовать оператор утверждения - `assert(condition, optionalMessage);` - чтобы прервать нормальное выполнение, если логическое условие ложно. В этом туре можно найти примеры утверждений. Вот еще несколько:
+
+```dart
+// Make sure the variable has a non-null value.
+assert(text != null);
+
+// Make sure the value is less than 100.
+assert(number < 100);
+
+// Make sure this is an https URL.
+assert(urlString.startsWith('https'));
+```
+
+Чтобы прикрепить сообщение к утверждению, добавьте строку в качестве второго аргумента в `assert` (не обязательно с конечной запятой):
+
+```dart
+assert(urlString.startsWith('https'),
+    'URL ($urlString) should start with "https".');
+```
+
+Первым аргументом assert может быть любое выражение, которое разрешается в логическое значение. Если значение выражения истинно, утверждение завершается успешно и выполнение продолжается. Если значение ложно, то утверждение не выполняется и выдается исключение ([AssertionError](https://api.dart.dev/stable/dart-core/AssertionError-class.html)).
+
+Когда именно утверждения работают? Это зависит от инструментов и фреймворка, которые используются:
+
+- Flutter включает утверждения в [режиме отладки](https://flutter.dev/docs/testing/debugging#debug-mode-assertions).
+- Инструменты только для разработки, такие как [dartdevc](https://dart.dev/tools/dartdevc), обычно по умолчанию включают утверждения.
+- Некоторые инструменты, такие как [dart](https://dart.dev/server/tools/dart-vm) и [dart2js](https://dart.dev/tools/dart2js), поддерживают утверждения с помощью флага командной строки: `--enable-asserts`.
+
+В производственном коде утверждения игнорируются, а аргументы для `assert` не оцениваются.
+
+## Исключения
+
