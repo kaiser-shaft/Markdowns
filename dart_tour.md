@@ -1328,3 +1328,124 @@ assert(urlString.startsWith('https'),
 
 ## Исключения
 
+Код в Dart может генерировать и перехватывать исключения. Исключения - это ошибки, указывающие на то, что произошло что-то непредвиденное. Если исключение не обнаружено, изолятор, вызвавший исключение, приостанавливается, и обычно изолятор и его программа завершаются.
+
+В отличие от Java, все исключения Dart являются непроверенными. Методы не объявляют, какие исключения они могут вызвать, и вам не требуется перехватывать какие-либо исключения.
+
+Dart предоставляет типы `Exception` и `Error`, а также множество предопределенных подтипов. Конечно, можно определять свои собственные исключения. Однако программы Dart могут выдавать любой ненулевой объект, а не только объекты `Exception` и `Error`, в качестве исключения.
+
+### Throw
+
+Вот пример создания исключения:
+
+```dart
+throw FormatException('Expected at least 1 section');
+```
+
+Также можно выбрасывать произвольные объекты:
+
+```dart
+throw 'Out of llamas!';
+```
+
+> **Примечание**: Код производственного качества обычно генерирует типы, реализующие [Error](https://api.dart.dev/stable/dart-core/Error-class.html) или [Exception](https://api.dart.dev/stable/dart-core/Exception-class.html).
+
+Поскольку генерирование исключения является выражением, можно генерировать исключения в операторах `=>`, а также в любом другом месте, где разрешены выражения:
+
+```dart
+void distanceTo(Point other) => throw UnimplementedError();
+```
+
+### Catch
+
+Перехват или захват исключения останавливает распространение исключения (если только не выбросить повторно исключение). Перехват исключения дает шанс справиться с ним:
+
+```dart
+try {
+  breedMoreLlamas();
+} on OutOfLlamasException {
+  buyMoreLlamas();
+}
+```
+
+Для обработки кода, который может вызывать более одного типа исключений, можно указать несколько  `catch`. Первый  `catch`, соответствующий типу выброшенного объекта, обрабатывает исключение. Если в `catch` не указан тип, то он может обрабатывать любой тип брошенного объекта:
+
+```dart
+try {
+  breedMoreLlamas();
+} on OutOfLlamasException {
+  // A specific exception
+  buyMoreLlamas();
+} on Exception catch (e) {
+  // Anything else that is an exception
+  print('Unknown exception: $e');
+} catch (e) {
+  // No specified type, handles all
+  print('Something really unknown: $e');
+}
+```
+
+Как показывает предыдущий код, можно использовать либо `on`, либо `catch`, либо оба. Они используйтся, когда нужно указать тип исключения. `catch` используется, когда обработчику исключений нужен объект исключения.
+
+Можно указать один или два параметра для `catch()`. Первое - это возникшее исключение, а второе - трассировка стека (объект [StackTrace](https://api.dart.dev/stable/dart-core/StackTrace-class.html)).
+
+```dart
+try {
+  // ···
+} on Exception catch (e) {
+  print('Exception details:\n $e');
+} catch (e, s) {
+  print('Exception details:\n $e');
+  print('Stack trace:\n $s');
+}
+```
+
+Чтобы частично обработать исключение, позволяя ему распространяться, используйте ключевое слово `rethrow`.
+
+```dart
+void misbehave() {
+  try {
+    dynamic foo = true;
+    print(foo++); // Runtime error
+  } catch (e) {
+    print('misbehave() partially handled ${e.runtimeType}.');
+    rethrow; // Allow callers to see the exception.
+  }
+}
+
+void main() {
+  try {
+    misbehave();
+  } catch (e) {
+    print('main() finished handling ${e.runtimeType}.');
+  }
+}
+```
+
+### Finaly
+
+Чтобы гарантировать выполнение некоторого кода вне зависимости от того, возникло ли исключение, используйте предложение `finally`. Если ни одно предложение `catch` не соответствует исключению, исключение распространяется после выполнения предложения `finally`:
+
+```dart
+try {
+  breedMoreLlamas();
+} finally {
+  // Always clean up, even if an exception is thrown.
+  cleanLlamaStalls();
+}
+```
+
+`finally` выполняется после любых подходящих предложений `catch`:
+
+```dart
+try {
+  breedMoreLlamas();
+} catch (e) {
+  print('Error: $e'); // Handle the exception first.
+} finally {
+  cleanLlamaStalls(); // Then clean up.
+}
+```
+
+## Классы
+
