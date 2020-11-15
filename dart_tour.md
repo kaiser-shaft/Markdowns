@@ -406,7 +406,7 @@ final constantMap = const {
   18: 'argon',
 };
 
-// constantMap[2] = 'Helium'; // This line will cause an error.
+// constantMap[2] = 'Helium'; // Эта строка вызовет ошибку.
 ```
 
 Словари поддерживают spread-оператор (`...`), nullspread-operator (`...?`), условные конструкции (`if`) и циклы (`for`).
@@ -503,7 +503,7 @@ enableFlags(bold: true, hidden: false);
 При определении функции используйте `{param1, param2, …}`, чтобы указать именованные параметры:
 
 ```dart
-/// Sets the [bold] and [hidden] flags ...
+/// Устанавливает флаги [bold] и [hidden] ...
 void enableFlags({bool bold, bool hidden}) {...}
 ```
 
@@ -551,10 +551,10 @@ assert(say('Bob', 'Howdy', 'smoke signal') ==
 Вот пример установки значений по умолчанию для названных параметров:
 
 ```dart
-/// Sets the [bold] and [hidden] flags ...
+/// Устанавливает флаги [bold] и [hidden] ...
 void enableFlags({bool bold = false, bool hidden = false}) {...}
 
-// bold will be true; hidden will be false.
+// bold будет true; hidden будет false.
 enableFlags(bold: true);
 ```
 
@@ -609,7 +609,7 @@ void main() {
 Вот пример функции `main()` для приложения командной строки, которое принимает аргументы:
 
 ```dart
-// Run the app like this: dart args.dart 1 test
+// Приложение запускается следующим образом: dart args.dart 1 test
 void main(List<String> arguments) {
   print(arguments);
 
@@ -632,7 +632,7 @@ void printElement(int element) {
 
 var list = [1, 2, 3];
 
-// Pass printElement as a parameter.
+// Передача printElement в качестве параметра.
 list.forEach(printElement);
 ```
 
@@ -710,17 +710,17 @@ void main() {
 Функции могут закрывать переменные, определенные в окружающих областях. В следующем примере `makeAdder()` захватывает переменную `addBy`. Куда бы ни отправилась возвращаемая функция, она запоминает `addBy`.
 
 ```dart
-/// Returns a function that adds [addBy] to the
-/// function's argument.
+/// Возвращает функцию, которая добавляет [addBy] в
+/// аргумент функции.
 Function makeAdder(int addBy) {
   return (int i) => addBy + i;
 }
 
 void main() {
-  // Create a function that adds 2.
+  // Создание функции, которая добавляет 2.
   var add2 = makeAdder(2);
 
-  // Create a function that adds 4.
+  // Создание функции, которая добавляет 4.
   var add4 = makeAdder(4);
 
   assert(add2(3) == 5);
@@ -733,36 +733,36 @@ void main() {
 Вот пример тестирования функций верхнего уровня, статических методов и методов экземпляра на равенство:
 
 ```dart
-void foo() {} // A top-level function
+void foo() {} // Функция верхнего уровня
 
 class A {
-  static void bar() {} // A static method
-  void baz() {} // An instance method
+  static void bar() {} // Статический метод
+  void baz() {} // Метод экземпляра
 }
 
 void main() {
   var x;
 
-  // Comparing top-level functions.
+  // Сравнение функций верхнего уровня.
   x = foo;
   assert(foo == x);
 
-  // Comparing static methods.
+  // Сравнение статический методов
   x = A.bar;
   assert(A.bar == x);
 
-  // Comparing instance methods.
-  var v = A(); // Instance #1 of A
-  var w = A(); // Instance #2 of A
+  // Сравнение экземпляров метода
+  var v = A(); // Экземпляр #1 класса A
+  var w = A(); // Экземпляр #2 класса A
   var y = w;
   x = w.baz;
 
-  // These closures refer to the same instance (#2),
-  // so they're equal.
+  // Эти замыкания относятся к одному и тому же экземпляру (#2),
+  // так что они равны.
   assert(y.baz == x);
 
-  // These closures refer to different instances,
-  // so they're unequal.
+  // Эти замыкания относятся к разным экземплярам,
+  // значит, они неравны.
   assert(v.baz != w.baz);
 }
 ```
@@ -816,10 +816,10 @@ a is T
 В таблице операторов каждый оператор имеет более высокий приоритет, чем операторы в следующих за ним строках. Например, мультипликативный оператор `%` имеет более высокий приоритет, чем (и, следовательно, выполняется раньше) оператор равенства `==`, который имеет более высокий приоритет, чем логический оператор И `&&`. Этот приоритет означает, что следующие две строки кода выполняются одинаково:
 
 ```dart
-// Parentheses improve readability.
+// Круглые скобки улучшают читабельность.
 if ((n % i == 0) && (d % i == 0)) ...
 
-// Harder to read, but equivalent.
+// Труднее читать, но равноценно.
 if (n % i == 0 && d % i == 0) ...
 ```
 
@@ -845,9 +845,9 @@ Dart поддерживает обычные арифметические опе
 assert(2 + 3 == 5);
 assert(2 - 3 == -1);
 assert(2 * 3 == 6);
-assert(5 / 2 == 2.5); // Result is a double
-assert(5 ~/ 2 == 2); // Result is an int
-assert(5 % 2 == 1); // Remainder
+assert(5 / 2 == 2.5); // Результат double
+assert(5 ~/ 2 == 2); // Результат int
+assert(5 % 2 == 1); // Остаток
 
 assert('5/2 = ${5 ~/ 2} r ${5 % 2}' == '5/2 = 2 r 1');
 ```
@@ -867,19 +867,19 @@ Dart также поддерживает как префиксные, так и 
 var a, b;
 
 a = 0;
-b = ++a; // Increment a before b gets its value.
+b = ++a; // Инкремент a, после b получает его значение.
 assert(a == b); // 1 == 1
 
 a = 0;
-b = a++; // Increment a AFTER b gets its value.
+b = a++; // Инкремент a ПОСЛЕ того как b получает его значение.
 assert(a != b); // 1 != 0
 
 a = 0;
-b = --a; // Decrement a before b gets its value.
+b = --a; // Декремент a, после b получает его значение.
 assert(a == b); // -1 == -1
 
 a = 0;
-b = a--; // Decrement a AFTER b gets its value.
+b = a--; // Декремент a ПОСЛЕ того как b получает его значение.
 assert(a != b); // -1 != 0
 ```
 
@@ -923,7 +923,7 @@ assert(a != b); // -1 != 0
 
 ```dart
 if (emp is Person) {
-  // Type check
+  // Проверка типа
   emp.firstName = 'Bob';
 }
 ```
@@ -935,9 +935,9 @@ if (emp is Person) {
 Значения можно присваивать с помощью оператора `=`.  Чтобы присвоить значение переменной только если она равноа `null` используется оператор `??=`.
 
 ```dart
-// Assign value to a
+// Присвоить значение a
 a = value;
-// Assign value to b if b is null; otherwise, b stays the same
+// Присвоить значение b если b равно null; иначе, b остается прежним
 b ??= value;
 ```
 
@@ -955,8 +955,8 @@ b ??= value;
 В следующем примере используются операторы присваивания и составного присваивания:
 
 ```dart
-var a = 2; // Assign using =
-a *= 3; // Assign and multiply: a = a * 3
+var a = 2; // Присвоить с помощью =
+a *= 3; // Умножить и присвоить: a = a * 3
 assert(a == 6);
 ```
 
@@ -967,14 +967,14 @@ assert(a == 6);
 | Operator | Meaning                                                      |
 | -------- | ------------------------------------------------------------ |
 | `!expr`  | инвертирует следующее выражение (изменяет истина на ложь и наоборот) |
-| `||`     | логическое И                                                 |
+| ` || `   | логическое И                                                 |
 | `&&`     | логическое ИЛИ                                               |
 
 Вот пример использования логических операторов:
 
 ```dart
 if (!done && (col == 0 || col == 3)) {
-  // ...Do something...
+  // ...Сделать что-то...
 }
 ```
 
@@ -985,7 +985,7 @@ if (!done && (col == 0 || col == 3)) {
 | Оператор | Значение                                                     |
 | -------- | ------------------------------------------------------------ |
 | `&`      | И                                                            |
-| `|`      | ИЛИ                                                          |
+| ` | `      | ИЛИ                                                          |
 | `^`      | Исключающее ИЛИ                                              |
 | `~expr`  | Унарное побитовое дополнение (0s становится 1s; 1s становится 0s) |
 | `<<`     | Сдвиг влево                                                  |
@@ -997,12 +997,12 @@ if (!done && (col == 0 || col == 3)) {
 final value = 0x22;
 final bitmask = 0x0f;
 
-assert((value & bitmask) == 0x02); // AND
-assert((value & ~bitmask) == 0x20); // AND NOT
-assert((value | bitmask) == 0x2f); // OR
-assert((value ^ bitmask) == 0x2d); // XOR
-assert((value << 4) == 0x220); // Shift left
-assert((value >> 4) == 0x02); // Shift right
+assert((value & bitmask) == 0x02); // И
+assert((value & ~bitmask) == 0x20); // И НЕ
+assert((value | bitmask) == 0x2f); // ИЛИ
+assert((value ^ bitmask) == 0x2d); // Исключающее ИЛИ
+assert((value << 4) == 0x220); // Сдвиг влево
+assert((value >> 4) == 0x02); // Сдвиг вправо
 ```
 
 ### Условные выражения
@@ -1026,10 +1026,10 @@ var visibility = isPublic ? 'public' : 'private';
 Если логическое выражение проверяется на `null`используется `??`.
 
 ```dart
-// Slightly longer version uses ?: operator.
+// Немного более длинная версия использует оператор ?: .
 String playerName(String name) => name != null ? name : 'Guest';
 
-// Very long version uses if-else statement.
+// Очень длинная версия использует оператор if-else.
 String playerName(String name) {
   if (name != null) {
     return name;
@@ -1046,8 +1046,8 @@ String playerName(String name) {
 Пример:
 
 ```dart
-querySelector('#confirm') // Get an object.
-  ..text = 'Confirm' // Use its members.
+querySelector('#confirm') // Получить объект.
+  ..text = 'Confirm' // Использовать его члены.
   ..classes.add('important')
   ..onClick.listen((e) => window.alert('Confirmed!'));
 ```
@@ -1081,7 +1081,7 @@ final addressBook = (AddressBookBuilder()
 ```dart
 var sb = StringBuffer();
 sb.write('foo')
-  ..write('bar'); // Error: method 'write' isn't defined for 'void'.
+  ..write('bar'); // Ошибка: метод "write" не определен для "void".
 ```
 
 Вызов `sb.write()` возвращает `void`, и не возможно построить каскад на `void`.
@@ -1253,7 +1253,7 @@ var command = 'OPEN';
 switch (command) {
   case 'OPEN':
     executeOpen();
-    // ERROR: Missing break
+    // Ошибка: Недостает break
 
   case 'CLOSED':
     executeClosed();
@@ -1266,9 +1266,9 @@ switch (command) {
 ```dart
 var command = 'CLOSED';
 switch (command) {
-  case 'CLOSED': // Empty case falls through.
+  case 'CLOSED': // Пустой case проваливается дальше.
   case 'NOW_CLOSED':
-    // Runs for both CLOSED and NOW_CLOSED.
+    // Работает для обоих CLOSED и NOW_CLOSED.
     executeNowClosed();
     break;
 }
@@ -1282,11 +1282,11 @@ switch (command) {
   case 'CLOSED':
     executeClosed();
     continue nowClosed;
-  // Continues executing at the nowClosed label.
+  // Продолжает выполнение на метке nowClosed
 
   nowClosed:
   case 'NOW_CLOSED':
-    // Runs for both CLOSED and NOW_CLOSED.
+    // Работает для обоих CLOSED и NOW_CLOSED.
     executeNowClosed();
     break;
 }
@@ -1299,13 +1299,13 @@ switch (command) {
 Во время разработки можно использовать оператор утверждения - `assert(condition, optionalMessage);` - чтобы прервать нормальное выполнение, если логическое условие ложно. В этом туре можно найти примеры утверждений. Вот еще несколько:
 
 ```dart
-// Make sure the variable has a non-null value.
+// Убедитесь, что переменная имеет ненулевое значение.
 assert(text != null);
 
-// Make sure the value is less than 100.
+// Убедитесь, что значение меньше 100.
 assert(number < 100);
 
-// Make sure this is an https URL.
+// Убедитесь, что это URL-адрес https.
 assert(urlString.startsWith('https'));
 ```
 
@@ -1374,13 +1374,13 @@ try {
 try {
   breedMoreLlamas();
 } on OutOfLlamasException {
-  // A specific exception
+  // Определенное исключение
   buyMoreLlamas();
 } on Exception catch (e) {
-  // Anything else that is an exception
+  // Все остальное, что является исключением
   print('Unknown exception: $e');
 } catch (e) {
-  // No specified type, handles all
+  // Нет указанного типа, обрабатывает все
   print('Something really unknown: $e');
 }
 ```
@@ -1400,16 +1400,16 @@ try {
 }
 ```
 
-Чтобы частично обработать исключение, позволяя ему распространяться, используйте ключевое слово `rethrow`.
+Чтобы частично обработать исключение, можно использовать ключевое слово `rethrow`.
 
 ```dart
 void misbehave() {
   try {
     dynamic foo = true;
-    print(foo++); // Runtime error
+    print(foo++); // Ошибка выполнения
   } catch (e) {
     print('misbehave() partially handled ${e.runtimeType}.');
-    rethrow; // Allow callers to see the exception.
+    rethrow; // Разрешить вызывающим видеть исключение.
   }
 }
 
@@ -1430,7 +1430,7 @@ void main() {
 try {
   breedMoreLlamas();
 } finally {
-  // Always clean up, even if an exception is thrown.
+  // Всегда выполняйте очистку, даже если возникнет исключение.
   cleanLlamaStalls();
 }
 ```
@@ -1441,9 +1441,9 @@ try {
 try {
   breedMoreLlamas();
 } catch (e) {
-  print('Error: $e'); // Handle the exception first.
+  print('Error: $e'); // Сначала обработай исключение
 } finally {
-  cleanLlamaStalls(); // Then clean up.
+  cleanLlamaStalls(); // Затем очисти
 }
 ```
 
